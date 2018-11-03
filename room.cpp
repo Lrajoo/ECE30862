@@ -5,16 +5,16 @@
 //using namespace std;
 
 void room::getBorders(room roomy){
-  if(!roomy.north.compare(" ")){
+  if(roomy.north != ""){
     cout << "North: " << roomy.north << endl;
   }
-  if(!roomy.south.compare(" ")){
+  if(roomy.south != ""){
     cout << "South: " << roomy.south << endl;
   }
-  if(!roomy.east.compare(" ")){
+  if(roomy.east != ""){
     cout << "East: " << roomy.east << endl;
   }
-  if(!roomy.west.compare(" ")){
+  if(roomy.west != ""){
     cout << "West: " << roomy.west << endl;
   }
 }
