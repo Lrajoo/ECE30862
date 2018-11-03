@@ -56,7 +56,7 @@ void trigger::printTrigger(trigger triggered, string command){
 }
 
 bool trigger::setValid(trigger triggered){
-  if(type == single){
+  if(triggered.type == "single"){
     return 0;
   }
   return 1;

@@ -26,7 +26,7 @@ class trigger{
   vector<string> action;
   string command;
   string type;
-  bool valid = 1;
+  bool valid;
 
   void printTrigger(trigger triggered, string command);
   bool setValid(trigger triggered);
