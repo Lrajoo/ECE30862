@@ -69,8 +69,8 @@ void room::printName(room roomy){
   cout << roomy.name << endl;
 }
 
-void room::getType(room roomy){
-  cout << roomy.type << endl;
+string room::getType(room roomy){
+  return roomy.type;
 }
 
 void room::getDescription(room roomy){

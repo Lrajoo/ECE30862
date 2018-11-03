@@ -29,12 +29,12 @@ int main(int argc, char * argv[])
     doc.parse<0>(&content[0]);
     //vectors for room, item, container and creature 
     vector<room> room_vector;
-    vector<xml_node<> * > item_vector;
+    //vector<item> item_vector;
     vector<xml_node<> * > container_vector;
     vector<xml_node<> * > creature_vector; 
     //root node
     xml_node<> * root_node = doc.first_node("map");
-    //scanning through file and identifying rooms, items, containers and creatures
+    //scanning through file and identifying rooms
     for(xml_node<> * curr_node = root_node->first_node(); curr_node; curr_node = curr_node->next_sibling()){
         room roomy;
         if(string(curr_node->name()) == "room"){
@@ -62,17 +62,13 @@ int main(int argc, char * argv[])
             room_vector.push_back(roomy);
         }
     }
+    //scanning through file and identifying items
+    //for(xml_node>< * )
+
 
     int size = room_vector.size();
     int i = 0;
-    // while( i < size){
-    //     room curr = room_vector[i];
-    //     curr.getName(curr);
-    //     curr.getDescription(curr);
-    //     curr.getType(curr);
-    //     curr.getBorders(curr);
-    //     i++;
-    // }
+    string check_exit;
     string input_command;
     string curr_room_str;
     string dummy;
@@ -83,8 +79,14 @@ int main(int argc, char * argv[])
 
     while(1){
         prev_room = curr_room;
+        check_exit = prev_room.getType(prev_room);
         cout << ">";
-        cin >> input_command;
+        std::getline(std::cin,input_command);
+        //open exit
+        if(string(input_command) == "open exit" && check_exit != ""){
+            cout << "Game Over" << endl;
+            return 0;
+        }
         if(string(input_command) == "n" || "s" || "e" || "w"){
              curr_room_str = prev_room.moveRoom(prev_room, input_command);
              if(prev_room.getName(prev_room) != curr_room_str){
@@ -99,6 +101,7 @@ int main(int argc, char * argv[])
              }
           
         }
+        
     }
 
     return 0;

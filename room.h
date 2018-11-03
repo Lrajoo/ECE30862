@@ -20,7 +20,7 @@ public:
 
   void getBorders(room roomy);
   string getName(room roomy);
-  void getType(room roomy);
+  string getType(room roomy);
   void getDescription(room roomy);
   string moveRoom(room roomy, string input);
   void printName(room roomy);
