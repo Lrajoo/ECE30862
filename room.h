@@ -3,6 +3,9 @@
 
 #include <stdio.h>
 #include <string>
+#include <vector>
+#include "item.h"
+
 
 using namespace std;
 
@@ -17,6 +20,9 @@ public:
   string west;
   string type;
   string name;
+
+  //item vector
+  //vector<item> item_vector;
 
   void getBorders(room roomy);
   string getName(room roomy);

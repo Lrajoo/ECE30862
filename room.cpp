@@ -44,7 +44,9 @@ string room::moveRoom(room roomy, string input){
       return name;
     }
   }
-  return 0;
+  else{
+    return "error";
+  };
 }
 
 void room::getBorders(room roomy){

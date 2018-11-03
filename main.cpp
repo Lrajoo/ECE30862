@@ -7,6 +7,7 @@
 #include <fstream>
 #include <vector>
 #include "room.h"
+#include "item.h"
 
 #include "rapidxml-1.13/rapidxml.hpp"
 #include "rapidxml-1.13/rapidxml_print.hpp"
@@ -21,7 +22,7 @@ int main(int argc, char * argv[])
     //xml intialization for parsing
     xml_document<> doc;
     //input file to be parsed
-    ifstream file("roomsample.xml");
+    ifstream file("itemsample.xml");
     stringstream buffer;
     buffer << file.rdbuf();
     file.close();
@@ -29,12 +30,13 @@ int main(int argc, char * argv[])
     doc.parse<0>(&content[0]);
     //vectors for room, item, container and creature 
     vector<room> room_vector;
-    //vector<item> item_vector;
-    vector<xml_node<> * > container_vector;
-    vector<xml_node<> * > creature_vector; 
+    vector<item> item_vector;
+    //vector<xml_node<> * > container_vector;
+    //vector<xml_node<> * > creature_vector; 
     //root node
     xml_node<> * root_node = doc.first_node("map");
     //scanning through file and identifying rooms
+    //curr = room
     for(xml_node<> * curr_node = root_node->first_node(); curr_node; curr_node = curr_node->next_sibling()){
         room roomy;
         if(string(curr_node->name()) == "room"){
@@ -63,15 +65,26 @@ int main(int argc, char * argv[])
         }
     }
     //scanning through file and identifying items
-    //for(xml_node>< * )
-
+    for(xml_node<> * item_node = root_node->first_node("item"); item_node; item_node = item_node->next_sibling()){
+        item itemy;
+        itemy.name = item_node->first_node("name")->value();
+        //itemy.description = item_node->first_node("description")->value();
+        if(item_node->first_node("writing")){
+            itemy.writing = item_node->first_node("writing")->value();
+        }
+        if(item_node->first_node("turnon")){
+            itemy.turn_on = item_node->first_node("turnon")->first_node("print")->value();
+            itemy.action_on = item_node->first_node("turnon")->first_node("action")->value();
+        }
+    
+        item_vector.push_back(itemy);
+    }
 
     int size = room_vector.size();
     int i = 0;
     string check_exit;
     string input_command;
     string curr_room_str;
-    string dummy;
     room curr_room = room_vector[0];
     room prev_room = room_vector[0];
     prev_room.getName(room_vector[0]);
@@ -86,10 +99,12 @@ int main(int argc, char * argv[])
         if(string(input_command) == "open exit" && check_exit != ""){
             cout << "Game Over" << endl;
             return 0;
-        }
-        if(string(input_command) == "n" || "s" || "e" || "w"){
+        }else if(string(input_command) == "n" || "s" || "e" || "w"){
              curr_room_str = prev_room.moveRoom(prev_room, input_command);
-             if(prev_room.getName(prev_room) != curr_room_str){
+             if(string(curr_room_str) == "error"){
+                cout << "Command not recognized" << endl;
+             }
+             else if(prev_room.getName(prev_room) != curr_room_str){
                 for(i=0; i < size; i++){
                     if(string(room_vector[i].getName(room_vector[i])) == curr_room_str){
                         curr_room = room_vector[i];
@@ -99,9 +114,7 @@ int main(int argc, char * argv[])
                     }
                 }
              }
-          
-        }
-        
+        }        
     }
 
     return 0;

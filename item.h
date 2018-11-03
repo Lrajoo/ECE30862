@@ -1,22 +1,29 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+#include <iostream>
 #include <stdio.h>
-#include <string>
+#include <string.h>
+#include <vector>
 #include "room.h"
 
-class item{
-  string name;
-  string status;
-  string description;
-  string writing;
-  string turn_on;
-  string on_action;
+using namespace std;
 
-  string getName(item itemx);
-  void printName(item itemx);
-  //void printStatus(item itemx);
-  void printDescription(item itemx);
-  void readItem(item itemx);
-  void turn_on(room* roomy, item itemx);
-}
+class item{
+  public:
+    string name;
+    string status;
+    string description;
+    string writing;
+    string turn_on;
+    string action_on;
+
+    string getName(item itemx);
+    void printName(item itemx);
+    //void printStatus(item itemx);
+    void printDescription(item itemx);
+    void readItem(item itemx);
+    //item turn_on_func(item itemx, roomy);
+};
+
+#endif
