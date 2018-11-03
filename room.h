@@ -18,11 +18,12 @@ public:
   string type;
   string name;
 
-
   void getBorders(room roomy);
-  void getName(room roomy);
+  string getName(room roomy);
   void getType(room roomy);
   void getDescription(room roomy);
+  string moveRoom(room roomy, string input);
+  void printName(room roomy);
 };
 
 #endif

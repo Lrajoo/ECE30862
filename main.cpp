@@ -47,30 +47,24 @@ int main(int argc, char * argv[])
                 if(string(border->value()) != "exit"){
                     if(string(border->first_node("direction")->value()) == "north"){
                         roomy.north = border->first_node("name")->value();
-                        cout << "n" << endl;
                     }
                     if(string(border->first_node("direction")->value()) == "south"){
                         roomy.south = border->first_node("name")->value();
-                        cout << "s" << endl;
                     }
                     if(string(border->first_node("direction")->value()) == "east"){
                         roomy.east = border->first_node("name")->value();
-                        cout << "e" << endl;
                     }
                     if(string(border->first_node("direction")->value()) == "west"){
                         roomy.west = border->first_node("name")->value();
-                        cout << "w" << endl;
                     }
                 }
-
-            
             }
             room_vector.push_back(roomy);
         }
     }
 
-    // int size = room_vector.size();
-    // int i = 0;
+    int size = room_vector.size();
+    int i = 0;
     // while( i < size){
     //     room curr = room_vector[i];
     //     curr.getName(curr);
@@ -79,6 +73,33 @@ int main(int argc, char * argv[])
     //     curr.getBorders(curr);
     //     i++;
     // }
+    string input_command;
+    string curr_room_str;
+    string dummy;
+    room curr_room = room_vector[0];
+    room prev_room = room_vector[0];
+    prev_room.getName(room_vector[0]);
+    room_vector[0].getDescription(room_vector[0]);
+
+    while(1){
+        prev_room = curr_room;
+        cout << ">";
+        cin >> input_command;
+        if(string(input_command) == "n" || "s" || "e" || "w"){
+             curr_room_str = prev_room.moveRoom(prev_room, input_command);
+             if(prev_room.getName(prev_room) != curr_room_str){
+                for(i=0; i < size; i++){
+                    if(string(room_vector[i].getName(room_vector[i])) == curr_room_str){
+                        curr_room = room_vector[i];
+                        curr_room.printName(curr_room);
+                        curr_room.getDescription(curr_room);
+                        break;
+                    }
+                }
+             }
+          
+        }
+    }
 
     return 0;
 }

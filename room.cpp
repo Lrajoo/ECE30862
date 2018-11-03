@@ -3,6 +3,49 @@
 #include <iostream>
 
 //using namespace std;
+string room::moveRoom(room roomy, string input){
+  if(input == "n"){
+    if(roomy.north != ""){
+      return roomy.north; 
+    }
+    else{
+      cout << "No where to go" << endl;
+      string name = roomy.getName(roomy);
+      return name;
+    }
+  }
+  if(input == "s"){
+    if(roomy.south != ""){
+      return roomy.south; 
+    }
+    else{
+      cout << "No where to go" << endl;
+      string name = roomy.getName(roomy);
+      return name;
+    }
+  }
+  if(input == "e"){
+    if(roomy.east != ""){
+      return roomy.east; 
+    }
+    else{
+      cout << "No where to go" << endl;
+      string name = roomy.getName(roomy);
+      return name;
+    }
+  }
+  if(input == "w"){
+    if(roomy.west != ""){
+      return roomy.west; 
+    }
+    else{
+      cout << "No where to go" << endl;
+      string name = roomy.getName(roomy);
+      return name;
+    }
+  }
+  return 0;
+}
 
 void room::getBorders(room roomy){
   if(roomy.north != ""){
@@ -14,12 +57,15 @@ void room::getBorders(room roomy){
   if(roomy.east != ""){
     cout << "East: " << roomy.east << endl;
   }
-  if(roomy.west != ""){
+  if(roomy.west != ""){ 
     cout << "West: " << roomy.west << endl;
   }
 }
+string room::getName(room roomy){
+  return roomy.name;
+}
 
-void room::getName(room roomy){
+void room::printName(room roomy){
   cout << roomy.name << endl;
 }
 
@@ -30,3 +76,5 @@ void room::getType(room roomy){
 void room::getDescription(room roomy){
   cout << roomy.description << endl;
 }
+
+
