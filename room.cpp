@@ -3,6 +3,17 @@
 #include <iostream>
 
 //using namespace std;
+bool room::getItem(room roomy, string itemx){
+  int size = roomy.item_vector.size();
+  int i;
+  for(i=0; i < size; i++){
+    if(string(roomy.item_vector[i]) == itemx){
+      return 1;
+    }
+  }
+  return 0;
+}
+
 string room::moveRoom(room roomy, string input){
   if(input == "n"){
     if(roomy.north != ""){

@@ -1,4 +1,5 @@
 #include "item.h"
+#include "room.h"
 #include "stdio.h"
 #include <string.h>
 #include <iostream>
@@ -10,15 +11,17 @@ string item::getName(item itemx){
 }
 
 void item::printName(item itemx){
-  cout << itemx.name;
-}
-void item::printDescription(item itemx){
-  cout << itemx.description;
+  cout << itemx.name << endl;
 }
 
 void item::readItem(item itemx){
-  cout << itemx.writing;
+  cout << itemx.writing << endl;
 }
+
+void item::turn_on_func(item itemx){
+  cout << itemx.turn_on << endl;
+}
+
 
 //item item::turn_on_func(item itemx,room roomy){
 //   cout << itemx.turn_on << endl;

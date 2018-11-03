@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
-#include "item.h"
-
 
 using namespace std;
 
@@ -22,14 +20,15 @@ public:
   string name;
 
   //item vector
-  //vector<item> item_vector;
-
+  vector<string> item_vector;
+  
   void getBorders(room roomy);
   string getName(room roomy);
   string getType(room roomy);
   void getDescription(room roomy);
   string moveRoom(room roomy, string input);
   void printName(room roomy);
+  bool getItem(room roomy, string itemx);
 };
 
 #endif
