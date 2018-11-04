@@ -324,8 +324,7 @@ int main(int argc, char * argv[]) {
                                 }
                             }
 
-                        }
-                        else if (command == "open") {
+                        } else if (command == "open") {
                             string container_name = input_command.substr(5);
                             int t;
                             int size_rv = room_vector[rv].container_vector.size();
@@ -437,21 +436,9 @@ int main(int argc, char * argv[]) {
                                 }
                             }
                             //cout << item_name << location << endl;
-                        } else if (string(input_command) == "n" || "s" || "e" || "w") {
-                            curr_room_str = prev_room.moveRoom(prev_room, input_command);
-                            if (string(curr_room_str) == "error") {
-                                cout << "Command not recognized" << endl;
-                            } else if (prev_room.getName(prev_room) != curr_room_str) {
-                                for (i = 0; i < size_room; i++) {
-                                    if (string(room_vector[i].getName(room_vector[i])) == curr_room_str) {
-                                        curr_room = room_vector[i];
-                                        curr_room.printName(curr_room);
-                                        curr_room.getDescription(curr_room);
-                                        //curr_room.getItem(curr_room);
-                                        break;
-                                    }
-                                }
-                            }
+                        } else if(command == "update") {
+                            string object = input_command.substr(7);
+                            
                         } else if (command == "take") { //take item and adds to inventory
                             string item_name = input_command.substr(5);
                             //check if item exists in inventory
@@ -556,6 +543,7 @@ int main(int argc, char * argv[]) {
             int t;
             int size_rv = room_vector[rv].container_vector.size();
             int shtHead;
+            int flag = 0;
             for (t = 0; t < size_rv; t++) {
                 if (room_vector[rv].container_vector[t] == container_name) {
                     int size_c = container_vector.size();
@@ -572,9 +560,13 @@ int main(int argc, char * argv[]) {
                         cout << container_name << " contains " << itemx << endl;
                         container_vector[shtHead].item = "";
                         room_vector[rv].item_vector.push_back(itemx);
+                        flag = 1;
                     }
                     break;
                 }
+            }
+            if(flag == 0){
+                cout << "This container doesn't exist" << endl;
             }
         } else if (command == "drop") {
             string item_name = input_command.substr(5);
