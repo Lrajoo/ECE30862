@@ -18,6 +18,7 @@ class item{
     string turn_on;
     string action_on;
     string curr_room_name;
+    string owner;
 
     string getName(item itemx);
     void printName(item itemx);
