@@ -78,8 +78,39 @@ int main(int argc, char * argv[]) {
                     }
                 }
             }
+            for (xml_node<> * trigger_node = curr_node->first_node("trigger"); trigger_node; trigger_node = trigger_node->next_sibling("trigger")) {    
+                trigger triggery;
+                if (trigger_node->first_node("type")) {
+                    triggery.type = trigger_node->first_node("type")->value();
+                }
+                if (trigger_node->first_node("command")) {
+                    triggery.command = trigger_node->first_node("command")->value();
+                }
+                for (xml_node<> * action_node = trigger_node->first_node("action"); action_node; action_node = action_node->next_sibling("action")) {
+                     triggery.action.push_back(action_node->value());
+                }
+                if (trigger_node->first_node("print")) {
+                    triggery.print = trigger_node->first_node("print")->value();
+                }
+                if (trigger_node->first_node("condition")) {
+                    if (trigger_node->first_node("condition")->first_node("object")) {
+                        triggery.conditioner.object = trigger_node->first_node("condition")->first_node("object")->value();
+                    }
+                    if (trigger_node->first_node("condition")->first_node("owner")) {
+                        triggery.conditioner.owner = trigger_node->first_node("condition")->first_node("owner")->value();
+                    }
+                    if (trigger_node->first_node("condition")->first_node("has")) {
+                        triggery.conditioner.has = trigger_node->first_node("condition")->first_node("has")->value();
+                    }
+                    if (trigger_node->first_node("condition")->first_node("status")) {
+                        triggery.conditioner.status = trigger_node->first_node("condition")->first_node("status")->value();
+                    }
+                }
+                roomy.triggered = triggery;
+                //trigger_vector.push_back(triggery);
+            }       
             room_vector.push_back(roomy);
-        }
+        } 
     }
     //scanning through file and identifying items
     for (xml_node<> * item_node = root_node->first_node("item"); item_node; item_node = item_node->next_sibling("item")) {
@@ -108,6 +139,36 @@ int main(int argc, char * argv[]) {
         if (container_node->first_node("accept")) {
             containery.accept.push_back(container_node->first_node("accept")->value());
         }
+        for (xml_node<> * trigger_node = container_node->first_node("trigger"); trigger_node; trigger_node = trigger_node->next_sibling("trigger")) {
+            trigger triggery;
+            if (trigger_node->first_node("type")) {
+                triggery.type = trigger_node->first_node("type")->value();
+            }
+            if (trigger_node->first_node("command")) {
+                triggery.command = trigger_node->first_node("command")->value();
+            }
+            for (xml_node<> * action_node = trigger_node->first_node("action"); action_node; action_node = action_node->next_sibling("action")) {
+                triggery.action.push_back(action_node->value());
+            }
+            if (trigger_node->first_node("print")) {
+                triggery.print = trigger_node->first_node("print")->value();
+            }
+            if (trigger_node->first_node("condition")) {
+                if (trigger_node->first_node("condition")->first_node("object")) {
+                    triggery.conditioner.object = trigger_node->first_node("condition")->first_node("object")->value();
+               }
+                if (trigger_node->first_node("condition")->first_node("owner")) {
+                    triggery.conditioner.owner = trigger_node->first_node("condition")->first_node("owner")->value();
+                }
+                if (trigger_node->first_node("condition")->first_node("has")) {
+                    triggery.conditioner.has = trigger_node->first_node("condition")->first_node("has")->value();
+                }
+                if (trigger_node->first_node("condition")->first_node("status")) {
+                triggery.conditioner.status = trigger_node->first_node("condition")->first_node("status")->value();
+                }
+            }   
+            containery.triggers = triggery;
+        }   
         container_vector.push_back(containery);
     }
     //scanning through file and identifying creatures
@@ -127,39 +188,39 @@ int main(int argc, char * argv[]) {
                 creaturey.attack = creature_node->first_node("attack")->first_node("print")->value();
             }
         }
+        for (xml_node<> * trigger_node = creature_node->first_node("trigger"); trigger_node; trigger_node = trigger_node->next_sibling("trigger")) {
+            trigger triggery;
+            if (trigger_node->first_node("type")) {
+                triggery.type = trigger_node->first_node("type")->value();
+            }
+            if (trigger_node->first_node("command")) {
+                triggery.command = trigger_node->first_node("command")->value();
+            }
+            for (xml_node<> * action_node = trigger_node->first_node("action"); action_node; action_node = action_node->next_sibling("action")) {
+                triggery.action.push_back(action_node->value());
+            }
+            if (trigger_node->first_node("print")) {
+                triggery.print = trigger_node->first_node("print")->value();
+            }
+            if (trigger_node->first_node("condition")) {
+                if (trigger_node->first_node("condition")->first_node("object")) {
+                    triggery.conditioner.object = trigger_node->first_node("condition")->first_node("object")->value();
+                }
+                if (trigger_node->first_node("condition")->first_node("owner")) {
+                    triggery.conditioner.owner = trigger_node->first_node("condition")->first_node("owner")->value();
+                }
+                if (trigger_node->first_node("condition")->first_node("has")) {
+                    triggery.conditioner.has = trigger_node->first_node("condition")->first_node("has")->value();
+                }
+                if (trigger_node->first_node("condition")->first_node("status")) {
+                    triggery.conditioner.status = trigger_node->first_node("condition")->first_node("status")->value();
+                }
+            }
+            creaturey.triggers = triggery;
+        }
         creature_vector.push_back(creaturey);
     }
     //scanning through file and identifying triggers
-    for (xml_node<> * trigger_node = root_node->first_node("trigger"); trigger_node; trigger_node = trigger_node->next_sibling("trigger")) {
-        trigger triggery;
-        if (trigger_node->first_node("type")) {
-            triggery.type = trigger_node->first_node("type")->value();
-        }
-        if (trigger_node->first_node("command")) {
-            triggery.command = trigger_node->first_node("command")->value();
-        }
-        for (xml_node<> * action_node = trigger_node->first_node("action"); action_node; action_node = action_node->next_sibling("action")) {
-            triggery.action.push_back(action_node->value());
-        }
-        if (trigger_node->first_node("print")) {
-            triggery.print = trigger_node->first_node("print")->value();
-        }
-        if (trigger_node->first_node("condition")) {
-            if (trigger_node->first_node("condition")->first_node("object")) {
-                triggery.conditioner.object = trigger_node->first_node("condition")->first_node("object")->value();
-            }
-            if (trigger_node->first_node("condition")->first_node("owner")) {
-                triggery.conditioner.owner = trigger_node->first_node("condition")->first_node("owner")->value();
-            }
-            if (trigger_node->first_node("condition")->first_node("has")) {
-                triggery.conditioner.has = trigger_node->first_node("condition")->first_node("has")->value();
-            }
-            if (trigger_node->first_node("condition")->first_node("status")) {
-                triggery.conditioner.status = trigger_node->first_node("condition")->first_node("status")->value();
-            }
-        }
-        trigger_vector.push_back(triggery);
-    }
 
     int size_container = container_vector.size();
     int a = 0;
@@ -229,9 +290,11 @@ int main(int argc, char * argv[]) {
             int size_room_creature = room_vector[rv].creature.size();
             int g;
             int creature_exists = 0;
+            string creature_name;
             for(g=0; g < size_room_creature; g++){
                 if(string(room_vector[rv].creature[g]) == creature_only){
                     cout << room_vector[rv].creature[g] << endl;
+                    creature_name = room_vector[rv].creature[g];
                     creature_exists = 1;
                 }
             }
@@ -239,12 +302,28 @@ int main(int argc, char * argv[]) {
             int size_i = inventory_vector.size();
             int item_in_inventory = 0;
             int vector_num;
-            for (g= 0; g < size_i; g++) {
+            string attack_item_name;
+            for(g= 0; g < size_i; g++) {
                 if (inventory_vector[g] == attack_command2){
-                    cout << inventory_vector[g] << endl;
+                    attack_item_name = inventory_vector[g];
                     item_in_inventory = 1;
                     vector_num = g;
                 }
+            }
+            //find creature in creature_vector
+            int h =0;
+            int item_match_vulnerability = 0;
+            for(g=0; g < creature_vector.size(); g++){
+                if(string(creature_vector[g].name) == creature_name){
+                    for(h=0; h < creature_vector[g].vulnerability.size();h++){
+                        if(creature_vector[g].vulnerability[h] == attack_item_name){
+                            item_match_vulnerability = 1;
+                        }
+                    }
+                }
+            }
+            if(item_match_vulnerability == 1){
+                cout << "work" << endl;
             }
 
         }else if (command == "turn") {
