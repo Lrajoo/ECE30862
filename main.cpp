@@ -22,20 +22,31 @@ using namespace std;
 
 int main(int argc, char * argv[]) {
     //xml intialization for parsing
-    xml_document<> doc;
-    //input file to be parsed
-    ifstream file("C:/Users/Xaxx/Desktop/ECE30862/ECE30862-master/containersample.xml");
-    stringstream buffer;
-    buffer << file.rdbuf();
-    file.close();
-    string content(buffer.str());
-    doc.parse<0>(&content[0]);
+    // xml_document<> doc;
+    // //input file to be parsed
+    // ifstream file("containersample.xml");
+    // stringstream buffer;
+    // buffer << file.rdbuf();
+    // file.close();
+    // string content(buffer.str());
+    // doc.parse<0>(&content[0]);
+    if(argc != 2){
+        cout << "Error. Please enter: executable filename.xml" <<endl;
+        return 1;
+    }
+
+    file<> xmlFile(argv[1]);
+    
+    xml_document<> doc;    // character type defaults to char
+    doc.parse<0>(xmlFile.data()); 
+
     //vectors for room, item, container and creature 
     vector<room> room_vector;
     vector<item> item_vector;
     vector<string> inventory_vector;
     vector<container> container_vector;
     vector<creature> creature_vector;
+    vector<trigger> trigger_vector;
     //root node
     xml_node<> * root_node = doc.first_node("map");
     //scanning through file and identifying rooms
@@ -312,7 +323,7 @@ int main(int argc, char * argv[]) {
                             }
                             room_vector[rv].item_vector.push_back(inventory_vector[vector_num]);
                             //remove item from vector
-                            inventory_vector.erase(inventory_vector.begin() + vector_num);
+                            inventory_vector.erase(inventory_vector.begin() + vector_num - 1);
                         } else if (command == "delete") {
                             string delim = " ";
                             string item_name = input_command.substr(7);
@@ -328,7 +339,7 @@ int main(int argc, char * argv[]) {
                                 int fbs2 = inventory_vector.size();
                                 for (i = 0; i < fbs2; i++) {
                                     if (inventory_vector[i] == item_name) {
-                                        inventory_vector.erase(inventory_vector.begin() + i);
+                                        inventory_vector.erase(inventory_vector.begin() + i - 1);
                                     }
                                 }
                             } else {
@@ -338,7 +349,7 @@ int main(int argc, char * argv[]) {
                                     if (room_vector[i].name == location) {
                                         fbs3 = room_vector[i].item_vector.size();
                                         for (int j = 0; j < fbs3; j++) {
-                                            room_vector[i].item_vector.erase(room_vector[i].item_vector.begin() + j);
+                                            room_vector[i].item_vector.erase(room_vector[i].item_vector.begin() + j - 1);
                                         }
                                     }
                                 }
@@ -423,7 +434,7 @@ int main(int argc, char * argv[]) {
                                 for (b = 0, c = 0; b < room_vector[rv].item_vector.size(); b++, c++) {
                                     if (item_name == room_vector[rv].item_vector[c]) {
                                         item_remove_room = c;
-                                        room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c);
+                                        room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c - 1);
                                     }
                                 }
                             }//item that doesn't exist
@@ -503,7 +514,7 @@ int main(int argc, char * argv[]) {
                     }
                     room_vector[rv].item_vector.push_back(inventory_vector[vector_num]);
                     //remove item from vector
-                    inventory_vector.erase(inventory_vector.begin() + vector_num);
+                    inventory_vector.erase(inventory_vector.begin() + vector_num - 1);
                 } else if (command == "take") { //take item and adds to inventory
                     string item_name = input_command.substr(5);
                     //check if item exists in inventory
@@ -535,7 +546,7 @@ int main(int argc, char * argv[]) {
                         for (b = 0, c = 0; b < room_vector[rv].item_vector.size(); b++, c++) {
                             if (item_name == room_vector[rv].item_vector[c]) {
                                 item_remove_room = c;
-                                room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c);
+                                room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c - 1);
                             }
                         }
                     }//item that doesn't exist
