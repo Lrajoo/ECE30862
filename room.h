@@ -18,11 +18,13 @@ public:
   string west;
   string type;
   string name;
+  string creature;
 
   //item vector
   vector<string> item_vector;
   //container vector
   vector<string> container_vector;
+ 
   
   void getBorders(room roomy);
   string getName(room roomy);

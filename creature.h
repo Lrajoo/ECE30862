@@ -17,6 +17,7 @@ class creature{
   vector <string> vulnerability;
   string attack;
   trigger triggers;
+  vector <string> action;
 
   string getName(creature kreacher);
   void printName(creature kreacher);

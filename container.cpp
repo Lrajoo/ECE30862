@@ -4,8 +4,6 @@ string container::getName(container contains){
   return contains.name;
 }
 
-
-
 void container::printName(container contains){
   cout << contains.name << endl;
 }

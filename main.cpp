@@ -10,6 +10,7 @@
 #include "room.h"
 #include "container.h"
 #include "creature.h"
+#include "trigger.h"
 
 
 #include "rapidxml-1.13/rapidxml.hpp"
@@ -27,7 +28,7 @@ int main(int argc, char * argv[])
     //xml intialization for parsing
     xml_document<> doc;
     //input file to be parsed
-    ifstream file("itemsample.xml");
+    ifstream file("triggersample.xml");
     stringstream buffer;
     buffer << file.rdbuf();
     file.close();
@@ -38,7 +39,8 @@ int main(int argc, char * argv[])
     vector<item> item_vector;
     vector<string> inventory_vector;
     vector<container> container_vector;
-    //vector<xml_node<> * > creature_vector; 
+    vector<creature> creature_vector;
+    vector<trigger> trigger_vector;  
     //root node
     xml_node<> * root_node = doc.first_node("map");
     //scanning through file and identifying rooms
@@ -118,15 +120,59 @@ int main(int argc, char * argv[])
         creature creaturey;
         creaturey.name = creature_node->first_node("name")->value();
         if(creature_node->first_node("vulnerability")){
-            string creature_weakness = creature_node->first_node("vulnerabilty")->value();
-            creaturey.vulnerability.push_back(creature_weakness);
+            for(xml_node<> * vulnerabilty_node = creature_node->first_node("vulnerability"); vulnerabilty_node; vulnerabilty_node = vulnerabilty_node->next_sibling("vulnerability")){
+                creaturey.vulnerability.push_back(vulnerabilty_node->value());
+            }   
         }
-        // if(creature_node->first_node("attack")){
-
-        // }
-        
+        if(creature_node->first_node("attack")){
+            for(xml_node<> * action_node = creature_node->first_node("attack")->first_node("action"); action_node; action_node = action_node->next_sibling("action")){
+                 creaturey.action.push_back(action_node->value());
+            }
+            if(creature_node->first_node("attack")->first_node("print")){
+                creaturey.attack = creature_node->first_node("attack")->first_node("print")->value();
+            }
+        }
+        creature_vector.push_back(creaturey);
     }
-    
+    //scanning through file and identifying triggers
+    for(xml_node<> * trigger_node = root_node->first_node("trigger"); trigger_node; trigger_node=trigger_node->next_sibling("trigger")){
+        trigger triggery;
+        if(trigger_node->first_node("type")){
+            triggery.type = trigger_node->first_node("type")->value();
+        }
+        if(trigger_node->first_node("command")){
+            triggery.command = trigger_node->first_node("command")->value();
+        }
+        for(xml_node<> * action_node = trigger_node->first_node("action"); action_node; action_node = action_node->next_sibling("action")){
+            triggery.action.push_back(action_node->value());
+        }
+        if(trigger_node->first_node("print")){
+            triggery.print = trigger_node->first_node("print")->value();
+        }
+        if(trigger_node->first_node("condition")){
+            if(trigger_node->first_node("condition")->first_node("object")){
+                triggery.conditioner.object = trigger_node->first_node("condition")->first_node("object")->value();
+            }
+            if(trigger_node->first_node("condition")->first_node("owner")){
+                triggery.conditioner.owner = trigger_node->first_node("condition")->first_node("owner")->value();
+            }
+            if(trigger_node->first_node("condition")->first_node("has")){
+                triggery.conditioner.has = trigger_node->first_node("condition")->first_node("has")->value();
+            }
+            if(trigger_node->first_node("condition")->first_node("status")){
+                triggery.conditioner.status = trigger_node->first_node("condition")->first_node("status")->value();
+            }
+        }
+        trigger_vector.push_back(triggery);
+    }
+    // int d;
+    // int size_tr = trigger_vector.size();
+    // cout << size_tr << endl;
+    // for(d = 0; d < size_tr; d++){
+    //     cout << trigger_vector[d].type << endl;
+    //     cout << trigger_vector[d].command << endl;
+    //     cout << trigger_vector[d].print << endl;
+    // }
     int size_container = container_vector.size();
     int a = 0;
  
@@ -178,7 +224,6 @@ int main(int argc, char * argv[])
                     else{
                         cout << ", " << inventory_vector[l];
                     }
-                    
                 }
                 cout << endl;
             }
