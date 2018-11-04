@@ -125,6 +125,9 @@ int main(int argc, char * argv[]) {
             itemy.turn_on = item_node->first_node("turnon")->first_node("print")->value();
             itemy.action_on = item_node->first_node("turnon")->first_node("action")->value();
         }
+        if (item_node->first_node("status")) {
+            itemy.status = item_node->first_node("status")->value();
+        }
 
         item_vector.push_back(itemy);
     }
