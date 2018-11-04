@@ -79,7 +79,7 @@ int main(int argc, char * argv[]) {
                     }
                 }
             }
-            for (xml_node<> * trigger_node = curr_node->first_node("trigger"); trigger_node; trigger_node = trigger_node->next_sibling("trigger")) {    
+            for (xml_node<> * trigger_node = curr_node->first_node("trigger"); trigger_node; trigger_node = trigger_node->next_sibling("trigger")) {
                 trigger triggery;
                 if (trigger_node->first_node("type")) {
                     triggery.type = trigger_node->first_node("type")->value();
@@ -88,7 +88,7 @@ int main(int argc, char * argv[]) {
                     triggery.command = trigger_node->first_node("command")->value();
                 }
                 for (xml_node<> * action_node = trigger_node->first_node("action"); action_node; action_node = action_node->next_sibling("action")) {
-                     triggery.action.push_back(action_node->value());
+                    triggery.action.push_back(action_node->value());
                 }
                 if (trigger_node->first_node("print")) {
                     triggery.print = trigger_node->first_node("print")->value();
@@ -109,9 +109,9 @@ int main(int argc, char * argv[]) {
                 }
                 roomy.triggered = triggery;
                 //trigger_vector.push_back(triggery);
-            }       
+            }
             room_vector.push_back(roomy);
-        } 
+        }
     }
     //scanning through file and identifying items
     for (xml_node<> * item_node = root_node->first_node("item"); item_node; item_node = item_node->next_sibling("item")) {
@@ -143,6 +143,9 @@ int main(int argc, char * argv[]) {
         if (container_node->first_node("accept")) {
             containery.accept.push_back(container_node->first_node("accept")->value());
         }
+        if (container_node->first_node("status")) {
+            containery.status = container_node->first_node("status")->value();
+        }
         for (xml_node<> * trigger_node = container_node->first_node("trigger"); trigger_node; trigger_node = trigger_node->next_sibling("trigger")) {
             trigger triggery;
             if (trigger_node->first_node("type")) {
@@ -160,7 +163,7 @@ int main(int argc, char * argv[]) {
             if (trigger_node->first_node("condition")) {
                 if (trigger_node->first_node("condition")->first_node("object")) {
                     triggery.conditioner.object = trigger_node->first_node("condition")->first_node("object")->value();
-               }
+                }
                 if (trigger_node->first_node("condition")->first_node("owner")) {
                     triggery.conditioner.owner = trigger_node->first_node("condition")->first_node("owner")->value();
                 }
@@ -168,11 +171,11 @@ int main(int argc, char * argv[]) {
                     triggery.conditioner.has = trigger_node->first_node("condition")->first_node("has")->value();
                 }
                 if (trigger_node->first_node("condition")->first_node("status")) {
-                triggery.conditioner.status = trigger_node->first_node("condition")->first_node("status")->value();
+                    triggery.conditioner.status = trigger_node->first_node("condition")->first_node("status")->value();
                 }
-            }   
+            }
             containery.triggers = triggery;
-        }   
+        }
         container_vector.push_back(containery);
     }
     //scanning through file and identifying creatures
@@ -223,7 +226,7 @@ int main(int argc, char * argv[]) {
             creaturey.triggers = triggery;
         }
         creature_vector.push_back(creaturey);
-}
+    }
 
     int size_container = container_vector.size();
     int a = 0;
@@ -694,7 +697,7 @@ int main(int argc, char * argv[]) {
                                         }
                                     }
                                 }
-                            } else if (command == "put") {
+                            } else if (command == "put" || command == "Put") {
                                 string delim = " ";
                                 string item_name = input_command.substr(4);
                                 size_t location_t = item_name.find("in");
@@ -731,7 +734,7 @@ int main(int argc, char * argv[]) {
                                     }
                                 }
 
-                            } else if (command == "open") {
+                            } else if (command == "open" || command == "Open") {
                                 string container_name = input_command.substr(5);
                                 int t;
                                 int size_rv = room_vector[rv].container_vector.size();
@@ -756,7 +759,7 @@ int main(int argc, char * argv[]) {
                                         break;
                                     }
                                 }
-                            } else if (command == "drop") {
+                            } else if (command == "drop" || command == "Drop") {
                                 string item_name = input_command.substr(5);
                                 //check if item is in inventory
                                 int k;
@@ -779,7 +782,7 @@ int main(int argc, char * argv[]) {
                                 room_vector[rv].item_vector.push_back(inventory_vector[vector_num]);
                                 //remove item from vector
                                 inventory_vector.erase(inventory_vector.begin() + vector_num);
-                            } else if (command == "delete") {
+                            } else if (command == "delete" || command == "Delete") {
                                 string delim = " ";
                                 string item_name = input_command.substr(7);
                                 string location;
@@ -809,7 +812,7 @@ int main(int argc, char * argv[]) {
                                         }
                                     }
                                 }
-                            } else if (command == "add") {
+                            } else if (command == "add" || command == "Add") {
                                 string delim = " ";
                                 string item_name = input_command.substr(4);
                                 size_t location_t = item_name.find("to");
@@ -842,7 +845,7 @@ int main(int argc, char * argv[]) {
                                         creature_vector[i].owner = location;
                                     }
                                 }
-                            } else if (command == "update") {
+                            } else if (command == "update" || command == "Update") {
                                 string delim = " ";
                                 string object = input_command.substr(7);
                                 size_t msg_t = object.find("to");
@@ -873,15 +876,15 @@ int main(int argc, char * argv[]) {
 
 
 
-                            } else if (command == "game") {
+                            } else if (command == "game" || command == "Game") {
                                 //size_t msg_t = input_command.find("over");
                                 string msg = input_command.substr(5);
                                 //cout << msg << endl;
-                                if (msg == "over") {
+                                if (msg == "over" || msg = "Over") {
                                     cout << "Victory!" << endl;
                                     return 0;
                                 }
-                            } else if (command == "take") { //take item and adds to inventory
+                            } else if (command == "take" || command == "Take") { //take item and adds to inventory
                                 string item_name = input_command.substr(5);
                                 //check if item exists in inventory
                                 int k;
@@ -1040,8 +1043,7 @@ int main(int argc, char * argv[]) {
                 room_vector[rv].item_vector.push_back(inventory_vector[vector_num]);
                 //remove item from vector
                 inventory_vector.erase(inventory_vector.begin() + vector_num);
-            }
-            else{
+            } else {
                 cout << "command not recognized" << endl;
             }
         } else if (command == "take") { //take item and adds to inventory
