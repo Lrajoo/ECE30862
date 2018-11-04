@@ -8,6 +8,7 @@
 #include <vector>
 #include "item.h"
 #include "room.h"
+#include "container.h"
 
 
 #include "rapidxml-1.13/rapidxml.hpp"
@@ -25,7 +26,7 @@ int main(int argc, char * argv[])
     //xml intialization for parsing
     xml_document<> doc;
     //input file to be parsed
-    ifstream file("itemsample.xml");
+    ifstream file("containersample.xml");
     stringstream buffer;
     buffer << file.rdbuf();
     file.close();
@@ -35,16 +36,16 @@ int main(int argc, char * argv[])
     vector<room> room_vector;
     vector<item> item_vector;
     vector<string> inventory_vector;
-    //vector<xml_node<> * > container_vector;
+    vector<container> container_vector;
     //vector<xml_node<> * > creature_vector; 
     //root node
     xml_node<> * root_node = doc.first_node("map");
     //scanning through file and identifying rooms
     //curr = room
-
-    for(xml_node<> * curr_node = root_node->first_node(); curr_node; curr_node = curr_node->next_sibling()){
+    for(xml_node<> * curr_node = root_node->first_node("room"); curr_node; curr_node = curr_node->next_sibling("room")){
         room roomy;
         string item_room_location;
+        string container_room_location;
         if(string(curr_node->name()) == "room"){
             roomy.name = curr_node->first_node("name")->value();
             roomy.description = curr_node->first_node("description")->value();
@@ -56,7 +57,11 @@ int main(int argc, char * argv[])
                     roomy.item_vector.push_back(item_room_location);
                     //cout << item_room_location << endl;
             }
-            for(xml_node<> * border = curr_node->first_node("border"); border; border = border->next_sibling()){
+            for(xml_node<> * container_parse = curr_node->first_node("container"); container_parse; container_parse = container_parse->next_sibling("container")){
+                    container_room_location = container_parse->value();
+                    roomy.container_vector.push_back(container_room_location);
+            }
+            for(xml_node<> * border = curr_node->first_node("border"); border; border = border->next_sibling("border")){
                 if(string(border->value()) != "exit"){
                     if(string(border->first_node("direction")->value()) == "north"){
                         roomy.north = border->first_node("name")->value();
@@ -75,9 +80,11 @@ int main(int argc, char * argv[])
             room_vector.push_back(roomy);
         }
     }
+    
     //scanning through file and identifying items
-    for(xml_node<> * item_node = root_node->first_node("item"); item_node; item_node = item_node->next_sibling()){
+    for(xml_node<> * item_node = root_node->first_node("item"); item_node; item_node = item_node->next_sibling("item")){
         item itemy;
+        
         itemy.name = item_node->first_node("name")->value();
         //itemy.description = item_node->first_node("description")->value();
         if(item_node->first_node("writing")){
@@ -90,9 +97,26 @@ int main(int argc, char * argv[])
     
         item_vector.push_back(itemy);
     }
+   
+    //scanning through file and identifying containers
+     for(xml_node<> * container_node = root_node->first_node("container"); container_node; container_node = container_node->next_sibling("container")){
+        container containery;
+        containery.name = container_node->first_node("name")->value();
+        
+        if(container_node->first_node("item")){
+            containery.item = container_node->first_node("item")->value();
+        }
+        if(container_node->first_node("accept")){
+            containery.accept.push_back(container_node->first_node("accept")->value());
+        }
+        container_vector.push_back(containery);
+    }
+    
+    int size_container = container_vector.size();
+    int a = 0;
+ 
     int size_item = item_vector.size();
     int j = 0;
-    //item curr_item = item_vector[0];
 
     int size_room = room_vector.size();
     int i = 0;

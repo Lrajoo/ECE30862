@@ -6,6 +6,7 @@
 #include <string.h>
 #include <vector>
 #include "trigger.h"
+#include "room.h"
 
 using namespace std;
 
@@ -15,7 +16,7 @@ class container{
   string status;
   string description;
   vector <string> accept;
-  vector <string> item;
+  string item;
   trigger triggers;
 
   string getName(container contains);

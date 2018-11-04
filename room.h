@@ -21,6 +21,8 @@ public:
 
   //item vector
   vector<string> item_vector;
+  //container vector
+  vector<string> container_vector;
   
   void getBorders(room roomy);
   string getName(room roomy);

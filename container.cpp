@@ -4,10 +4,11 @@ string container::getName(container contains){
   return contains.name;
 }
 
-void container::printName(container contains){
-  cout << contains.name;
-}
 
+
+void container::printName(container contains){
+  cout << contains.name << endl;
+}
 void container::printItems(container contains){
   int i;
   int size = contains.item.size();
