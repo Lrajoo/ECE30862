@@ -24,7 +24,7 @@ int main(int argc, char * argv[]) {
     //xml intialization for parsing
     xml_document<> doc;
     //input file to be parsed
-    ifstream file("C:/Users/Xaxx/Desktop/ECE30862/ECE30862-master/creaturesample.xml");
+    ifstream file("C:/Users/Xaxx/Desktop/ECE30862/ECE30862-master/sample.txt.xml");
     stringstream buffer;
     buffer << file.rdbuf();
     file.close();
@@ -880,7 +880,7 @@ int main(int argc, char * argv[]) {
                                 //size_t msg_t = input_command.find("over");
                                 string msg = input_command.substr(5);
                                 //cout << msg << endl;
-                                if (msg == "over" || msg = "Over") {
+                                if (msg == "over" || msg == "Over") {
                                     cout << "Victory!" << endl;
                                     return 0;
                                 }
@@ -958,32 +958,40 @@ int main(int argc, char * argv[]) {
                 int bsFlag = 0;
                 for (i = 0; i < fbs; i++) {
                     if (container_vector[i].name == location) {
-                        for (int j = 0; j < container_vector[i].accept.size(); j++)
+                        for (int j = 0; j < container_vector[i].accept.size(); j++) {
+                            //cout << bsFlag << endl;
                             if (container_vector[i].accept[j] == item_name) {
                                 container_vector[i].item = item_name;
                                 bsFlag = 1;
                                 break;
                             }
+                        }
+                        if (container_vector[i].accept.size() == 0) {
+                            bsFlag = 1;
+                            container_vector[i].item = item_name;
+                        }
                     }
-                    if (container_vector[i].accept.size() == 0) {
-                        bsFlag = 1;
-                        container_vector[i].item = item_name;
-                    }
+
                 }
+                //cout << bsFlag << endl;
                 if (bsFlag == 1) {
                     for (i = 0; i < fbs3; i++) {
                         if (inventory_vector[i] == item_name) {
                             inventory_vector.erase(inventory_vector.begin() + i);
                         }
                     }
-                }
-                for (int i = 0; i < fbs2; i++) {
-                    if (item_name == item_vector[i].name && bsFlag == 1) {
-                        item_vector[i].owner = location;
-                        cout << "You put the " << item_name << " in the " << location << endl;
-                        break;
+                    for (int i = 0; i < fbs2; i++) {
+                        if (item_name == item_vector[i].name) {
+                            item_vector[i].owner = location;
+                            cout << "You put the " << item_name << " in the " << location << endl;
+                            break;
+                        }
                     }
                 }
+                else{
+                    cout << "Cannot put item into container" << endl;
+                }
+
             } else {
                 cout << "command not recognized" << endl;
             }
