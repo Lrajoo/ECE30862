@@ -9,6 +9,7 @@
 #include "item.h"
 #include "room.h"
 #include "container.h"
+#include "creature.h"
 
 
 #include "rapidxml-1.13/rapidxml.hpp"
@@ -26,7 +27,7 @@ int main(int argc, char * argv[])
     //xml intialization for parsing
     xml_document<> doc;
     //input file to be parsed
-    ifstream file("containersample.xml");
+    ifstream file("itemsample.xml");
     stringstream buffer;
     buffer << file.rdbuf();
     file.close();
@@ -61,6 +62,9 @@ int main(int argc, char * argv[])
                     container_room_location = container_parse->value();
                     roomy.container_vector.push_back(container_room_location);
             }
+            if(curr_node->first_node("creature")){
+                roomy.creature = curr_node->first_node("creature")->value();
+            }
             for(xml_node<> * border = curr_node->first_node("border"); border; border = border->next_sibling("border")){
                 if(string(border->value()) != "exit"){
                     if(string(border->first_node("direction")->value()) == "north"){
@@ -80,7 +84,6 @@ int main(int argc, char * argv[])
             room_vector.push_back(roomy);
         }
     }
-    
     //scanning through file and identifying items
     for(xml_node<> * item_node = root_node->first_node("item"); item_node; item_node = item_node->next_sibling("item")){
         item itemy;
@@ -97,7 +100,6 @@ int main(int argc, char * argv[])
     
         item_vector.push_back(itemy);
     }
-   
     //scanning through file and identifying containers
      for(xml_node<> * container_node = root_node->first_node("container"); container_node; container_node = container_node->next_sibling("container")){
         container containery;
@@ -110,6 +112,19 @@ int main(int argc, char * argv[])
             containery.accept.push_back(container_node->first_node("accept")->value());
         }
         container_vector.push_back(containery);
+    }
+    //scanning through file and identifying creatures
+    for(xml_node<> * creature_node = root_node->first_node("creature"); creature_node; creature_node = creature_node->next_sibling("creature")){
+        creature creaturey;
+        creaturey.name = creature_node->first_node("name")->value();
+        if(creature_node->first_node("vulnerability")){
+            string creature_weakness = creature_node->first_node("vulnerabilty")->value();
+            creaturey.vulnerability.push_back(creature_weakness);
+        }
+        // if(creature_node->first_node("attack")){
+
+        // }
+        
     }
     
     int size_container = container_vector.size();
@@ -128,8 +143,15 @@ int main(int argc, char * argv[])
     prev_room.getName(room_vector[0]);
     room_vector[0].getDescription(room_vector[0]);
     //curr_room.getItem(curr_room);
+    int rv;
 
     while(1){
+        for(i=0; i < size_room; i++){
+            if(string(curr_room.name) == room_vector[i].name){
+                rv = i;
+                cout << "rv " << i << endl;
+            }
+        }
         prev_room = curr_room;
         check_exit = prev_room.getType(prev_room);
         cout << ">";
@@ -203,7 +225,7 @@ int main(int argc, char * argv[])
                 }
             }
             //add back to the room
-            curr_room.item_vector.push_back(inventory_vector[vector_num]);
+            room_vector[rv].item_vector.push_back(inventory_vector[vector_num]);
             //remove item from vector
             inventory_vector.erase(inventory_vector.begin() + vector_num - 1) ;
         }else if(command == "take"){    //take item and adds to inventory
@@ -212,16 +234,28 @@ int main(int argc, char * argv[])
             int k;
             int size_i = inventory_vector.size();
             int item_exists = 0;
+            int item_num;
             for(k=0; k<size_i; k++){
                 if(inventory_vector[k] == item_name){
                     cout << "Item exists in inventory" << endl;
+                    int item_num = k;
                     item_exists = 1;
                 }
             }
             if(curr_room.getItem(curr_room,item_name) && item_exists == 0){
-                //add to inventory
+                //add to inventory   
                 inventory_vector.push_back(item_name);
                 cout<< "Item " << item_name << " added to inventory" << endl;
+                //remove item from current room
+                int b;
+                int c;
+                int item_remove_room;
+                for(b=0, c=0; b < room_vector[rv].item_vector.size(); b++,c++){
+                    if(item_name == room_vector[rv].item_vector[c]){
+                        item_remove_room = c;
+                        room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin()+c-1);
+                    }
+                }
             }
             //item that doesn't exist
             if(!curr_room.getItem(curr_room,item_name) && item_exists == 0) {
@@ -246,6 +280,6 @@ int main(int argc, char * argv[])
         }        
     }
 
-    return 0;
+    //return 0;
 }
 
