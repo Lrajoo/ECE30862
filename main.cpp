@@ -22,14 +22,15 @@ using namespace std;
 
 int main(int argc, char * argv[]) {
     //xml intialization for parsing
-    xml_document<> doc;
-    //input file to be parsed
-    ifstream file("C:/Users/Xaxx/Desktop/ECE30862/ECE30862-master/sample.txt.xml");
-    stringstream buffer;
-    buffer << file.rdbuf();
-    file.close();
-    string content(buffer.str());
-    doc.parse<0>(&content[0]);
+        if(argc != 2){
+        cout << "Error. Please enter: executable filename.xml" <<endl;
+        return 1;
+    }
+
+    file<> xmlFile(argv[1]);
+    
+    xml_document<> doc;    // character type defaults to char
+    doc.parse<0>(xmlFile.data());
     //vectors for room, item, container and creature 
     vector<room> room_vector;
     vector<item> item_vector;
@@ -457,7 +458,7 @@ int main(int argc, char * argv[]) {
                                             if (bsFlag == 1) {
                                                 for (i = 0; i < fbs3; i++) {
                                                     if (inventory_vector[i] == item_name) {
-                                                        inventory_vector.erase(inventory_vector.begin() + i);
+                                                        inventory_vector.erase(inventory_vector.begin() + i-1);
                                                     }
                                                 }
                                             }
@@ -515,7 +516,7 @@ int main(int argc, char * argv[]) {
                                             }
                                             room_vector[rv].item_vector.push_back(inventory_vector[vector_num]);
                                             //remove item from vector
-                                            inventory_vector.erase(inventory_vector.begin() + vector_num);
+                                            inventory_vector.erase(inventory_vector.begin() + vector_num-1);
                                         } else if (command == "delete" || command == "Delete") {
                                             string delim = " ";
                                             string item_name = input_command.substr(7);
@@ -531,7 +532,7 @@ int main(int argc, char * argv[]) {
                                                 int fbs2 = inventory_vector.size();
                                                 for (i = 0; i < fbs2; i++) {
                                                     if (inventory_vector[i] == item_name) {
-                                                        inventory_vector.erase(inventory_vector.begin() + i);
+                                                        inventory_vector.erase(inventory_vector.begin() + i-1);
                                                     }
                                                 }
                                             } else {
@@ -541,7 +542,7 @@ int main(int argc, char * argv[]) {
                                                     if (room_vector[i].name == location) {
                                                         fbs3 = room_vector[i].item_vector.size();
                                                         for (int j = 0; j < fbs3; j++) {
-                                                            room_vector[i].item_vector.erase(room_vector[i].item_vector.begin() + j);
+                                                            room_vector[i].item_vector.erase(room_vector[i].item_vector.begin() + j-1);
                                                         }
                                                     }
                                                 }
@@ -649,7 +650,7 @@ int main(int argc, char * argv[]) {
                                                 for (b = 0, c = 0; b < room_vector[rv].item_vector.size(); b++, c++) {
                                                     if (item_name == room_vector[rv].item_vector[c]) {
                                                         item_remove_room = c;
-                                                        room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c);
+                                                        room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c-1);
                                                     }
                                                 }
                                             }//item that doesn't exist
@@ -779,7 +780,7 @@ int main(int argc, char * argv[]) {
                                     if (bsFlag == 1) {
                                         for (i = 0; i < fbs3; i++) {
                                             if (inventory_vector[i] == item_name) {
-                                                inventory_vector.erase(inventory_vector.begin() + i);
+                                                inventory_vector.erase(inventory_vector.begin() + i-1);
                                             }
                                         }
                                     }
@@ -837,7 +838,7 @@ int main(int argc, char * argv[]) {
                                     }
                                     room_vector[rv].item_vector.push_back(inventory_vector[vector_num]);
                                     //remove item from vector
-                                    inventory_vector.erase(inventory_vector.begin() + vector_num);
+                                    inventory_vector.erase(inventory_vector.begin() + vector_num-1);
                                 } else if (command == "delete" || command == "Delete") {
                                     string delim = " ";
                                     string item_name = input_command.substr(7);
@@ -853,7 +854,7 @@ int main(int argc, char * argv[]) {
                                         int fbs2 = inventory_vector.size();
                                         for (i = 0; i < fbs2; i++) {
                                             if (inventory_vector[i] == item_name) {
-                                                inventory_vector.erase(inventory_vector.begin() + i);
+                                                inventory_vector.erase(inventory_vector.begin() + i-1);
                                             }
                                         }
                                     } else {
@@ -863,7 +864,7 @@ int main(int argc, char * argv[]) {
                                             if (room_vector[i].name == location) {
                                                 fbs3 = room_vector[i].item_vector.size();
                                                 for (int j = 0; j < fbs3; j++) {
-                                                    room_vector[i].item_vector.erase(room_vector[i].item_vector.begin() + j);
+                                                    room_vector[i].item_vector.erase(room_vector[i].item_vector.begin() + j-1);
                                                 }
                                             }
                                         }
@@ -971,7 +972,7 @@ int main(int argc, char * argv[]) {
                                         for (b = 0, c = 0; b < room_vector[rv].item_vector.size(); b++, c++) {
                                             if (item_name == room_vector[rv].item_vector[c]) {
                                                 item_remove_room = c;
-                                                room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c);
+                                                room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c-1);
                                             }
                                         }
                                     }//item that doesn't exist
@@ -1033,7 +1034,7 @@ int main(int argc, char * argv[]) {
                     if (bsFlag == 1) {
                         for (i = 0; i < fbs3; i++) {
                             if (inventory_vector[i] == item_name) {
-                                inventory_vector.erase(inventory_vector.begin() + i);
+                                inventory_vector.erase(inventory_vector.begin() + i-1);
                             }
                         }
                         for (int i = 0; i < fbs2; i++) {
@@ -1105,7 +1106,7 @@ int main(int argc, char * argv[]) {
                 if (item_exists == 1) {
                     room_vector[rv].item_vector.push_back(inventory_vector[vector_num]);
                     //remove item from vector
-                    inventory_vector.erase(inventory_vector.begin() + vector_num);
+                    inventory_vector.erase(inventory_vector.begin() + vector_num-1);
                 } else {
                     cout << "command not recognized" << endl;
                 }
@@ -1140,7 +1141,7 @@ int main(int argc, char * argv[]) {
                     for (b = 0, c = 0; b < room_vector[rv].item_vector.size(); b++, c++) {
                         if (item_name == room_vector[rv].item_vector[c]) {
                             item_remove_room = c;
-                            room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c);
+                            room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c-1);
                         }
                     }
                 }//item that doesn't exist
@@ -1164,7 +1165,34 @@ int main(int argc, char * argv[]) {
                 }
             }
         }
+        int z=0;
+        int z1=0;
+        int size_crea_z1 = creature_vector.size();
+        int size_crea = room_vector[rv].creature.size();
+        creature creature_to_be_trigger;
+        for(z=0; z< size_crea; z++){
+            for(z1=0; z1<size_crea_z1; z1++){
+                if(room_vector[rv].creature[z] == creature_vector[z1].name){
+                    creature_to_be_trigger = creature_vector[z1];
+                }
+            }
+            
+        }
+        int z2 = 0;
+        int z3 = 0;
+        int i_size = inventory_vector.size();
+        int item_inv_size = item_vector.size();
+        for(z2 = 0; z2 < i_size; z2++){
+            //check condition for object
+            if(creature_to_be_trigger.triggers.conditioner.object == inventory_vector[z2]){
+                for(z3=0; z3 < item_inv_size; z3++){
+                    if(creature_to_be_trigger.triggers.conditioner.status == item_vector[z3].status){
+                        cout << creature_to_be_trigger.triggers.print << endl;
+                    }
+                }
+            }
+        }
+        
     }
     //return 0;
 }
-
