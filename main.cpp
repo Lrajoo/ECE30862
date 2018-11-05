@@ -1183,12 +1183,16 @@ int main(int argc, char * argv[]) {
         int i_size = inventory_vector.size();
         int item_inv_size = item_vector.size();
         for(z2 = 0; z2 < i_size; z2++){
-            //check condition for object
+            //check condition for item
             if(creature_to_be_trigger.triggers.conditioner.object == inventory_vector[z2]){
                 for(z3=0; z3 < item_inv_size; z3++){
-                    if(creature_to_be_trigger.triggers.conditioner.status == item_vector[z3].status){
-                        cout << creature_to_be_trigger.triggers.print << endl;
-                    }
+                    //check for which item in item vector
+                    if(inventory_vector[z2] == item_vector[z3].name){
+                        //check for item status
+                        if(creature_to_be_trigger.triggers.conditioner.status == item_vector[z3].status){
+                            cout << creature_to_be_trigger.triggers.print << endl;
+                        }
+                    }      
                 }
             }
         }
