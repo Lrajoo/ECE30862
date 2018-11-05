@@ -18,6 +18,7 @@ class container{
   vector <string> accept;
   string item;
   trigger triggers;
+  bool flag;
 
   string getName(container contains);
   void printName(container contains);

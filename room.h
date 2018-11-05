@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include "trigger.h"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ public:
   string type;
   string name;
   vector <string> creature;
+  trigger triggered;
 
   //item vector
   vector<string> item_vector;

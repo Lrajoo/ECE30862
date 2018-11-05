@@ -25,9 +25,5 @@ clean:
 		rm -rf *o zork
 
 test: zork
-		#./zork samples/roomsample.xml
-		#./zork samples/itemsample.xml
-		./zork samples/containersample.xml
-		#./zork samples/creaturesample.xml
-		#./zork samples/triggersample.xml
+		./zork samples/sample.txt.xml
 
