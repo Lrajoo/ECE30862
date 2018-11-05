@@ -15,10 +15,16 @@ void item::printName(item itemx){
 }
 
 void item::readItem(item itemx){
-  cout << itemx.writing << endl;
+  if(itemx.writing == ""){
+    cout << "Nothing written" << endl;
+  }
+  else{
+     cout << itemx.writing << endl;
+  }
 }
 
 void item::turn_on_func(item itemx){
+  cout << "You activate the " << itemx.name << endl;
   cout << itemx.turn_on << endl;
 }
 

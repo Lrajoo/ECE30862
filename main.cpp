@@ -22,14 +22,16 @@ using namespace std;
 
 int main(int argc, char * argv[]) {
     //xml intialization for parsing
-    xml_document<> doc;
     //input file to be parsed
-    ifstream file("C:/Users/Xaxx/Desktop/ECE30862/ECE30862-master/sample.txt.xml");
-    stringstream buffer;
-    buffer << file.rdbuf();
-    file.close();
-    string content(buffer.str());
-    doc.parse<0>(&content[0]);
+        if(argc != 2){
+        cout << "Error. Please enter: executable filename.xml" <<endl;
+        return 1;
+    }
+
+    file<> xmlFile(argv[1]);
+    
+    xml_document<> doc;    // character type defaults to char
+    doc.parse<0>(xmlFile.data()); 
     //vectors for room, item, container and creature 
     vector<room> room_vector;
     vector<item> item_vector;
@@ -337,7 +339,28 @@ int main(int argc, char * argv[]) {
                     }
                     cout << endl;
                 }
-            } else if (command == "attack") {
+            }else if(command == "read"){
+                string item_read = input_command.substr(5);
+                int p=0;
+                int q=0;
+                int size_p = inventory_vector.size();
+                int item_readable = 0;
+                for(p=0; p<size_p; p++){
+                    if(inventory_vector[p] == item_read){
+                        for(q=0; q<item_vector.size(); q++){
+                            if(inventory_vector[p] == item_vector[q].name){
+                                item_vector[q].readItem(item_vector[q]);
+                                item_readable = 1;
+                            }
+                        }
+                    }
+                }
+                if(item_readable != 1){
+                    cout << "Command not recognized" << endl;
+                }
+                
+
+            }else if (command == "attack") {
                 std::size_t pos = input_command.find("attack");
                 std::string attack_command = input_command.substr(pos).substr(7);
                 std::string delimiter = " ";
@@ -420,7 +443,7 @@ int main(int argc, char * argv[]) {
                                                     vector_num = k;
                                                 }
                                             }
-                                            if (item_in_inventory == 1) {
+                                            if(item_in_inventory == 1) {
                                                 int size_item_vector = item_vector.size();
                                                 int m;
                                                 for (m = 0; m < size_item_vector; m++) {
@@ -455,7 +478,7 @@ int main(int argc, char * argv[]) {
                                             if (bsFlag == 1) {
                                                 for (i = 0; i < fbs3; i++) {
                                                     if (inventory_vector[i] == item_name) {
-                                                        inventory_vector.erase(inventory_vector.begin() + i);
+                                                        inventory_vector.erase(inventory_vector.begin() + i-1);
                                                     }
                                                 }
                                             }
@@ -513,7 +536,7 @@ int main(int argc, char * argv[]) {
                                             }
                                             room_vector[rv].item_vector.push_back(inventory_vector[vector_num]);
                                             //remove item from vector
-                                            inventory_vector.erase(inventory_vector.begin() + vector_num);
+                                            inventory_vector.erase(inventory_vector.begin() + vector_num-1);
                                         } else if (command == "delete" || command == "Delete") {
                                             string delim = " ";
                                             string item_name = input_command.substr(7);
@@ -529,7 +552,7 @@ int main(int argc, char * argv[]) {
                                                 int fbs2 = inventory_vector.size();
                                                 for (i = 0; i < fbs2; i++) {
                                                     if (inventory_vector[i] == item_name) {
-                                                        inventory_vector.erase(inventory_vector.begin() + i);
+                                                        inventory_vector.erase(inventory_vector.begin() + i-1);
                                                     }
                                                 }
                                             } else {
@@ -539,7 +562,7 @@ int main(int argc, char * argv[]) {
                                                     if (room_vector[i].name == location) {
                                                         fbs3 = room_vector[i].item_vector.size();
                                                         for (int j = 0; j < fbs3; j++) {
-                                                            room_vector[i].item_vector.erase(room_vector[i].item_vector.begin() + j);
+                                                            room_vector[i].item_vector.erase(room_vector[i].item_vector.begin() + j-1);
                                                         }
                                                     }
                                                 }
@@ -647,7 +670,7 @@ int main(int argc, char * argv[]) {
                                                 for (b = 0, c = 0; b < room_vector[rv].item_vector.size(); b++, c++) {
                                                     if (item_name == room_vector[rv].item_vector[c]) {
                                                         item_remove_room = c;
-                                                        room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c);
+                                                        room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c-1);
                                                     }
                                                 }
                                             }//item that doesn't exist
@@ -777,7 +800,7 @@ int main(int argc, char * argv[]) {
                                     if (bsFlag == 1) {
                                         for (i = 0; i < fbs3; i++) {
                                             if (inventory_vector[i] == item_name) {
-                                                inventory_vector.erase(inventory_vector.begin() + i);
+                                                inventory_vector.erase(inventory_vector.begin() + i-1);
                                             }
                                         }
                                     }
@@ -835,7 +858,7 @@ int main(int argc, char * argv[]) {
                                     }
                                     room_vector[rv].item_vector.push_back(inventory_vector[vector_num]);
                                     //remove item from vector
-                                    inventory_vector.erase(inventory_vector.begin() + vector_num);
+                                    inventory_vector.erase(inventory_vector.begin() + vector_num-1);
                                 } else if (command == "delete" || command == "Delete") {
                                     string delim = " ";
                                     string item_name = input_command.substr(7);
@@ -851,7 +874,7 @@ int main(int argc, char * argv[]) {
                                         int fbs2 = inventory_vector.size();
                                         for (i = 0; i < fbs2; i++) {
                                             if (inventory_vector[i] == item_name) {
-                                                inventory_vector.erase(inventory_vector.begin() + i);
+                                                inventory_vector.erase(inventory_vector.begin() + i-1);
                                             }
                                         }
                                     } else {
@@ -861,7 +884,7 @@ int main(int argc, char * argv[]) {
                                             if (room_vector[i].name == location) {
                                                 fbs3 = room_vector[i].item_vector.size();
                                                 for (int j = 0; j < fbs3; j++) {
-                                                    room_vector[i].item_vector.erase(room_vector[i].item_vector.begin() + j);
+                                                    room_vector[i].item_vector.erase(room_vector[i].item_vector.begin() + j-1);
                                                 }
                                             }
                                         }
@@ -973,7 +996,7 @@ int main(int argc, char * argv[]) {
                                         for (b = 0, c = 0; b < room_vector[rv].item_vector.size(); b++, c++) {
                                             if (item_name == room_vector[rv].item_vector[c]) {
                                                 item_remove_room = c;
-                                                room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c);
+                                                room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c-1);
                                             }
                                         }
                                     }//item that doesn't exist
@@ -1038,7 +1061,7 @@ int main(int argc, char * argv[]) {
                     if (bsFlag == 1) {
                         for (i = 0; i < fbs3; i++) {
                             if (inventory_vector[i] == item_name) {
-                                inventory_vector.erase(inventory_vector.begin() + i);
+                                inventory_vector.erase(inventory_vector.begin() + i-1);
                                 break;
                             }
                         }
@@ -1161,7 +1184,7 @@ int main(int argc, char * argv[]) {
                 if (item_exists == 1) {
                     room_vector[rv].item_vector.push_back(inventory_vector[vector_num]);
                     //remove item from vector
-                    inventory_vector.erase(inventory_vector.begin() + vector_num);
+                    inventory_vector.erase(inventory_vector.begin() + vector_num-1);
                 } else {
                     cout << "command not recognized" << endl;
                 }
@@ -1196,7 +1219,7 @@ int main(int argc, char * argv[]) {
                     for (b = 0, c = 0; b < room_vector[rv].item_vector.size(); b++, c++) {
                         if (item_name == room_vector[rv].item_vector[c]) {
                             item_remove_room = c;
-                            room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c);
+                            room_vector[rv].item_vector.erase(room_vector[rv].item_vector.begin() + c-1);
                         }
                     }
                 }//item that doesn't exist
